@@ -38,6 +38,35 @@ for(let i=0;i<14;i++){
   embers.append(spark);
 }
 document.body.append(embers);
+// Decorative flames and smoke stay in the page margins while scrolling.
+const atmosphere = document.createElement('div');
+atmosphere.className = 'atmosphere';
+atmosphere.setAttribute('aria-hidden', 'true');
+for (const side of ['left', 'right']) {
+  const edge = document.createElement('div');
+  edge.className = 'atmosphere-edge atmosphere-' + side;
+  for (let i = 0; i < 5; i++) {
+    const flame = document.createElement('span');
+    flame.className = 'flame';
+    flame.style.setProperty('--offset', (i * 18) + '%');
+    flame.style.setProperty('--delay', (-i * 1.37) + 's');
+    flame.style.setProperty('--duration', (3.8 + i * .47) + 's');
+    edge.append(flame);
+  }
+  for (let i = 0; i < 3; i++) {
+    const smoke = document.createElement('span');
+    smoke.className = 'smoke';
+    smoke.style.setProperty('--offset', (i * 30) + '%');
+    smoke.style.setProperty('--delay', (-i * 5.2) + 's');
+    edge.append(smoke);
+  }
+  atmosphere.append(edge);
+}
+document.body.append(atmosphere);
+document.addEventListener('visibilitychange', () => {
+  document.body.classList.toggle('effects-paused', document.hidden);
+});
+
 const form=document.querySelector('#contact');
 if(form){
   if(new URLSearchParams(location.search).get('thema')==='download') form.elements.thema.value='Hilfe beim Download';
