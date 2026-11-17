@@ -29,6 +29,7 @@ h2 {font-size:clamp(1.65rem,4vw,2.5rem);margin:.3rem 0 1rem}
 h3 {font-size:1.5rem}
 li {padding:.25em 0}
 footer {padding:1.25rem 0 2rem;border-top:1px solid #675e50;color:#d0c7b6;font-size:.9rem}
+button {font:inherit;background:#332b25;color:#f1e8d5;border:1px solid #99866e;padding:.35em .7em;cursor:pointer;margin:.15em}
 </style>
 </head>
 <body>
@@ -39,6 +40,11 @@ footer {padding:1.25rem 0 2rem;border-top:1px solid #675e50;color:#d0c7b6;font-s
 <p>Für diese beiden Dioramen habe ich mir dieselbe Kathedrale zu zwei verschiedenen Zeiten vorgestellt. In der ersten Szene ist das Dach gerade eingestürzt. In der zweiten wächst Moos in den Fugen, und durch die Fenster siehst du, wie sich das Grün auch draußen zwischen den Ruinen ausbreitet.</p>
 <p>Ein Papercraft-Projekt von Ronald.</p>
 </header>
+<section id="statistik" aria-label="Statistik-Einstellungen" hidden>
+<p>Darf Google Analytics Seitenaufrufe und Klicks messen? Du kannst deine Wahl jederzeit unten unter „Statistik-Einstellungen“ ändern.</p>
+<button type="button" id="allow">Statistik erlauben</button>
+<button type="button" id="deny">Ablehnen</button>
+</section>
 <section id="modelle">
 <h2>Alle Dioramen im Überblick</h2>
 <p>Alle gezeigten Dioramen sind im Paket enthalten.</p>
@@ -73,6 +79,48 @@ footer {padding:1.25rem 0 2rem;border-top:1px solid #675e50;color:#d0c7b6;font-s
 <a href="#modelle">Zurück zur Modellübersicht ↑</a>
 </section>
 </main>
-<footer>Ein unabhängiges Papercraft-Projekt von Ronald.</footer>
+<footer>Ein unabhängiges Papercraft-Projekt von Ronald. <button id="settings" type="button" hidden>Statistik-Einstellungen</button></footer>
+
+<script>
+(() => {
+  const id = 'G-Y2P58QHJ71';
+  const key = 'statistik-einwilligung';
+  const panel = document.getElementById('statistik');
+  const settings = document.getElementById('settings');
+  let choice;
+  try { choice = localStorage.getItem(key); } catch {}
+  let started = false;
+  function startAnalytics() {
+    if (started) return;
+    started = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    gtag('consent', 'default', {analytics_storage:'granted', ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied'});
+    gtag('js', new Date());
+    gtag('config', id, {allow_google_signals:false, allow_ad_personalization_signals:false});
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+    document.head.appendChild(script);
+  }
+  function save(value) {
+    try { localStorage.setItem(key, value); } catch {}
+    panel.hidden = true;
+    if (value === 'yes') {
+      window['ga-disable-' + id] = false;
+      startAnalytics();
+    } else {
+      window['ga-disable-' + id] = true;
+      if (started) location.reload();
+    }
+  }
+  if (choice === 'yes') startAnalytics();
+  panel.hidden = choice === 'yes' || choice === 'no';
+  settings.hidden = false;
+  settings.onclick = () => { panel.hidden = false; document.getElementById('allow').focus(); };
+  document.getElementById('allow').onclick = () => save('yes');
+  document.getElementById('deny').onclick = () => save('no');
+})();
+</script>
 </body>
 </html>
