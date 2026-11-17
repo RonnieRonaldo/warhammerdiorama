@@ -5,6 +5,7 @@ import { join } from 'node:path';
 const output = 'dist';
 rmSync(output, { recursive: true, force: true });
 mkdirSync(output);
+cpSync('sitemap.xml', join(output, 'sitemap.xml'));
 for (const entry of readdirSync('.', { withFileTypes: true })) {
   if (entry.isFile() && entry.name.endsWith('.html')) {
     cpSync(entry.name, join(output, entry.name));
