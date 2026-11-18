@@ -32,31 +32,23 @@ consent.querySelectorAll('[data-choice]').forEach(button=>button.onclick=()=>{
 const embers=document.createElement('div');
 embers.className='embers';
 embers.setAttribute('aria-hidden','true');
-for(let i=0;i<14;i++){
+for(let i=0;i<32;i++){
   const spark=document.createElement('i');
-  spark.style.cssText='--x:'+(i%4===0?2+i%4:82+(i*7)%17)+'%;--y:'+((i*19)%92)+'%;--t:'+(5+i%4)+'s;--d:-'+(i*.83)+'s';
+  spark.style.cssText='--x:'+(i%2===0?1+(i*7)%9:90+(i*7)%9)+'%;--y:'+((i*19)%100)+'%;--t:'+(6+i%5)+'s;--d:-'+(i*.83)+'s;--size:'+(2+i%3)+'px';
   embers.append(spark);
 }
 document.body.append(embers);
-// Decorative flames and smoke stay in the page margins while scrolling.
+// Decorative sparks and soft smoke stay in the page margins while scrolling.
 const atmosphere = document.createElement('div');
 atmosphere.className = 'atmosphere';
 atmosphere.setAttribute('aria-hidden', 'true');
 for (const side of ['left', 'right']) {
   const edge = document.createElement('div');
   edge.className = 'atmosphere-edge atmosphere-' + side;
-  for (let i = 0; i < 5; i++) {
-    const flame = document.createElement('span');
-    flame.className = 'flame';
-    flame.style.setProperty('--offset', (i * 18) + '%');
-    flame.style.setProperty('--delay', (-i * 1.37) + 's');
-    flame.style.setProperty('--duration', (3.8 + i * .47) + 's');
-    edge.append(flame);
-  }
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const smoke = document.createElement('span');
     smoke.className = 'smoke';
-    smoke.style.setProperty('--offset', (i * 30) + '%');
+    smoke.style.setProperty('--offset', (i * 26) + '%');
     smoke.style.setProperty('--delay', (-i * 5.2) + 's');
     edge.append(smoke);
   }
